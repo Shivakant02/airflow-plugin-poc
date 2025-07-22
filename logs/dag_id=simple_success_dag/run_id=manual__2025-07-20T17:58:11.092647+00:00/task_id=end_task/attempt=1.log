@@ -1,0 +1,12 @@
+{"timestamp":"2025-07-20T17:59:30.798173","level":"info","event":"DAG bundles loaded: dags-folder, example_dags","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager"}
+{"timestamp":"2025-07-20T17:59:30.798489","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/simple_success_dag.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-07-20T17:59:30.939851Z","level":"info","event":"Task instance is in running state","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T17:59:30.939977Z","level":"info","event":" Previous state of the Task instance: TaskInstanceState.QUEUED","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T17:59:30.940073Z","level":"info","event":"Current task name:end_task","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T17:59:30.940132Z","level":"info","event":"Dag name:simple_success_dag","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T17:59:30.941242Z","level":"info","event":"DAG ending - wrapping up","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T17:59:45.941439Z","level":"info","event":"End task completed successfully","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T17:59:45.941598","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator"}
+{"timestamp":"2025-07-20T17:59:45.974932Z","level":"info","event":"Task instance in success state","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T17:59:45.975058Z","level":"info","event":" Previous state of the Task instance: TaskInstanceState.RUNNING","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T17:59:45.975191Z","level":"info","event":"Task operator:<Task(PythonOperator): end_task>","chan":"stdout","logger":"task"}

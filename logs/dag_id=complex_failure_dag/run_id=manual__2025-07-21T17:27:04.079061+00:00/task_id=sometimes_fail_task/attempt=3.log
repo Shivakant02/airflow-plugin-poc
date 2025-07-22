@@ -1,0 +1,46 @@
+[2025-07-21T17:28:08.158+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: complex_failure_dag.sometimes_fail_task manual__2025-07-21T17:27:04.079061+00:00 [queued]>
+[2025-07-21T17:28:08.164+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: complex_failure_dag.sometimes_fail_task manual__2025-07-21T17:27:04.079061+00:00 [queued]>
+[2025-07-21T17:28:08.164+0000] {taskinstance.py:1361} INFO - Starting attempt 3 of 3
+[2025-07-21T17:28:08.173+0000] {taskinstance.py:1382} INFO - Executing <Task(PythonOperator): sometimes_fail_task> on 2025-07-21 17:27:04.079061+00:00
+[2025-07-21T17:28:08.176+0000] {standard_task_runner.py:57} INFO - Started process 220 to run task
+[2025-07-21T17:28:08.179+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'complex_failure_dag', 'sometimes_fail_task', 'manual__2025-07-21T17:27:04.079061+00:00', '--job-id', '39', '--raw', '--subdir', 'DAGS_FOLDER/complex_failure_dag.py', '--cfg-path', '/tmp/tmppg6wzzgl']
+[2025-07-21T17:28:08.181+0000] {standard_task_runner.py:85} INFO - Job 39: Subtask sometimes_fail_task
+[2025-07-21T17:28:08.217+0000] {task_command.py:416} INFO - Running <TaskInstance: complex_failure_dag.sometimes_fail_task manual__2025-07-21T17:27:04.079061+00:00 [running]> on host 2cf9a9b2cf2c
+[2025-07-21T17:28:08.268+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='metadata_test' AIRFLOW_CTX_DAG_ID='complex_failure_dag' AIRFLOW_CTX_TASK_ID='sometimes_fail_task' AIRFLOW_CTX_EXECUTION_DATE='2025-07-21T17:27:04.079061+00:00' AIRFLOW_CTX_TRY_NUMBER='3' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-07-21T17:27:04.079061+00:00'
+[2025-07-21T17:28:08.268+0000] {task_logging_plugin.py:37} INFO - [Task Metadata] (running): 
+{'event': 'TASK_RUNNING', 'timestamp': '2025-07-21T17:28:08.268642', 'dag_id': 'complex_failure_dag', 'dag_run_id': 'manual__2025-07-21T17:27:04.079061+00:00', 'task_id': 'sometimes_fail_task', 'execution_date': '2025-07-21 17:27:04.079061+00:00', 'try_number': 3, 'start_date': '2025-07-21 17:28:08.158911+00:00', 'end_date': 'None', 'state': 'running', 'queue': 'default', 'operator': 'PythonOperator', 'hostname': '2cf9a9b2cf2c', 'log_url': 'http://localhost:8080/dags/complex_failure_dag/grid?dag_run_id=manual__2025-07-21T17%3A27%3A04.079061%2B00%3A00&task_id=sometimes_fail_task&tab=logs'}
+[2025-07-21T17:28:08.268+0000] {task_logging_plugin.py:41} INFO - [Task Metadata]-logs**** (running): 
+{'event': 'TASK_RUNNING', 'timestamp': '2025-07-21T17:28:08.268642', 'dag_id': 'complex_failure_dag', 'dag_run_id': 'manual__2025-07-21T17:27:04.079061+00:00', 'task_id': 'sometimes_fail_task', 'execution_date': '2025-07-21 17:27:04.079061+00:00', 'try_number': 3, 'start_date': '2025-07-21 17:28:08.158911+00:00', 'end_date': 'None', 'state': 'running', 'queue': 'default', 'operator': 'PythonOperator', 'hostname': '2cf9a9b2cf2c', 'log_url': 'http://localhost:8080/dags/complex_failure_dag/grid?dag_run_id=manual__2025-07-21T17%3A27%3A04.079061%2B00%3A00&task_id=sometimes_fail_task&tab=logs'}
+[2025-07-21T17:28:08.277+0000] {task_graph_plugin.py:38} INFO - 
+[task_graph_logs] Task Graph for DAG 'complex_failure_dag':
+  Task: start_task, Upstream: [], Downstream: ['sometimes_fail_task', 'long_running_task'], Operator: SerializedBaseOperator
+  Task: sometimes_fail_task, Upstream: ['start_task'], Downstream: ['final_cleanup'], Operator: SerializedBaseOperator
+  Task: long_running_task, Upstream: ['start_task'], Downstream: ['final_cleanup'], Operator: SerializedBaseOperator
+  Task: final_cleanup, Upstream: ['sometimes_fail_task', 'long_running_task'], Downstream: ['guaranteed_failure'], Operator: SerializedBaseOperator
+  Task: guaranteed_failure, Upstream: ['final_cleanup'], Downstream: [], Operator: SerializedBaseOperator
+
+[2025-07-21T17:28:08.277+0000] {task_graph_plugin.py:42} INFO - 
+[task_graph_logs] Task Graph for DAG 'complex_failure_dag':
+  Task: start_task, Upstream: [], Downstream: ['sometimes_fail_task', 'long_running_task'], Operator: SerializedBaseOperator
+  Task: sometimes_fail_task, Upstream: ['start_task'], Downstream: ['final_cleanup'], Operator: SerializedBaseOperator
+  Task: long_running_task, Upstream: ['start_task'], Downstream: ['final_cleanup'], Operator: SerializedBaseOperator
+  Task: final_cleanup, Upstream: ['sometimes_fail_task', 'long_running_task'], Downstream: ['guaranteed_failure'], Operator: SerializedBaseOperator
+  Task: guaranteed_failure, Upstream: ['final_cleanup'], Downstream: [], Operator: SerializedBaseOperator
+
+[2025-07-21T17:28:08.278+0000] {task_logging_plugin.py:37} INFO - [Task Metadata] (failed): 
+{'event': 'TASK_FAILED', 'timestamp': '2025-07-21T17:28:08.278234', 'dag_id': 'complex_failure_dag', 'dag_run_id': 'manual__2025-07-21T17:27:04.079061+00:00', 'task_id': 'sometimes_fail_task', 'execution_date': '2025-07-21 17:27:04.079061+00:00', 'try_number': 3, 'start_date': '2025-07-21 17:28:08.158911+00:00', 'end_date': 'None', 'state': 'running', 'queue': 'default', 'operator': 'PythonOperator', 'hostname': '2cf9a9b2cf2c', 'log_url': 'http://localhost:8080/dags/complex_failure_dag/grid?dag_run_id=manual__2025-07-21T17%3A27%3A04.079061%2B00%3A00&task_id=sometimes_fail_task&tab=logs'}
+[2025-07-21T17:28:08.278+0000] {task_logging_plugin.py:41} INFO - [Task Metadata]-logs**** (failed): 
+{'event': 'TASK_FAILED', 'timestamp': '2025-07-21T17:28:08.278234', 'dag_id': 'complex_failure_dag', 'dag_run_id': 'manual__2025-07-21T17:27:04.079061+00:00', 'task_id': 'sometimes_fail_task', 'execution_date': '2025-07-21 17:27:04.079061+00:00', 'try_number': 3, 'start_date': '2025-07-21 17:28:08.158911+00:00', 'end_date': 'None', 'state': 'running', 'queue': 'default', 'operator': 'PythonOperator', 'hostname': '2cf9a9b2cf2c', 'log_url': 'http://localhost:8080/dags/complex_failure_dag/grid?dag_run_id=manual__2025-07-21T17%3A27%3A04.079061%2B00%3A00&task_id=sometimes_fail_task&tab=logs'}
+[2025-07-21T17:28:08.278+0000] {taskinstance.py:1937} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 192, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 209, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/complex_failure_dag.py", line 34, in sometimes_fail_task
+    """Task that randomly fails to demonstrate retry behavior"""[37][41][42]
+IndexError: string index out of range
+[2025-07-21T17:28:08.285+0000] {taskinstance.py:1400} INFO - Marking task as FAILED. dag_id=complex_failure_dag, task_id=sometimes_fail_task, execution_date=20250721T172704, start_date=20250721T172808, end_date=20250721T172808
+[2025-07-21T17:28:08.294+0000] {standard_task_runner.py:104} ERROR - Failed to execute job 39 for task sometimes_fail_task (string index out of range; 220)
+[2025-07-21T17:28:08.310+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 1
+[2025-07-21T17:28:08.328+0000] {taskinstance.py:2778} INFO - 0 downstream tasks scheduled from follow-on schedule check

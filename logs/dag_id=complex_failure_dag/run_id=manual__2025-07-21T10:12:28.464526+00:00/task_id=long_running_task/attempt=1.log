@@ -1,0 +1,14 @@
+{"timestamp":"2025-07-21T10:12:50.618736","level":"info","event":"MetadataExtractionPlugin module is being loaded","logger":"metadata_extraction_plugin"}
+{"timestamp":"2025-07-21T10:12:50.619033","level":"info","event":"MetadataExtractionPlugin initialized successfully","logger":"metadata_extraction_plugin"}
+{"timestamp":"2025-07-21T10:12:50.862285","level":"info","event":"DAG bundles loaded: dags-folder, example_dags","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager"}
+{"timestamp":"2025-07-21T10:12:50.862642","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/complex_failure_dag.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-07-21T10:12:51.178856Z","level":"info","event":"Task instance is in running state","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-21T10:12:51.179068Z","level":"info","event":" Previous state of the Task instance: TaskInstanceState.QUEUED","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-21T10:12:51.179186Z","level":"info","event":"Current task name:long_running_task","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-21T10:12:51.179259Z","level":"info","event":"Dag name:complex_failure_dag","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-21T10:12:51.180324Z","level":"info","event":"Starting long running task...","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-21T10:14:06.180524Z","level":"info","event":"Long running task completed","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-21T10:14:06.180588","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator"}
+{"timestamp":"2025-07-21T10:14:06.220336Z","level":"info","event":"Task instance in success state","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-21T10:14:06.220671Z","level":"info","event":" Previous state of the Task instance: TaskInstanceState.RUNNING","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-21T10:14:06.220937Z","level":"info","event":"Task operator:<Task(PythonOperator): long_running_task>","chan":"stdout","logger":"task"}

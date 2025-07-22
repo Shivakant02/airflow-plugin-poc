@@ -1,0 +1,39 @@
+[2025-07-21T17:27:25.643+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: complex_failure_dag.long_running_task manual__2025-07-21T17:27:04.079061+00:00 [queued]>
+[2025-07-21T17:27:25.656+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: complex_failure_dag.long_running_task manual__2025-07-21T17:27:04.079061+00:00 [queued]>
+[2025-07-21T17:27:25.656+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 4
+[2025-07-21T17:27:25.670+0000] {taskinstance.py:1382} INFO - Executing <Task(PythonOperator): long_running_task> on 2025-07-21 17:27:04.079061+00:00
+[2025-07-21T17:27:25.675+0000] {standard_task_runner.py:57} INFO - Started process 196 to run task
+[2025-07-21T17:27:25.678+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'complex_failure_dag', 'long_running_task', 'manual__2025-07-21T17:27:04.079061+00:00', '--job-id', '37', '--raw', '--subdir', 'DAGS_FOLDER/complex_failure_dag.py', '--cfg-path', '/tmp/tmple61hk61']
+[2025-07-21T17:27:25.679+0000] {standard_task_runner.py:85} INFO - Job 37: Subtask long_running_task
+[2025-07-21T17:27:25.717+0000] {task_command.py:416} INFO - Running <TaskInstance: complex_failure_dag.long_running_task manual__2025-07-21T17:27:04.079061+00:00 [running]> on host 2cf9a9b2cf2c
+[2025-07-21T17:27:25.783+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='metadata_test' AIRFLOW_CTX_DAG_ID='complex_failure_dag' AIRFLOW_CTX_TASK_ID='long_running_task' AIRFLOW_CTX_EXECUTION_DATE='2025-07-21T17:27:04.079061+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-07-21T17:27:04.079061+00:00'
+[2025-07-21T17:27:25.784+0000] {task_logging_plugin.py:37} INFO - [Task Metadata] (running): 
+{'event': 'TASK_RUNNING', 'timestamp': '2025-07-21T17:27:25.784186', 'dag_id': 'complex_failure_dag', 'dag_run_id': 'manual__2025-07-21T17:27:04.079061+00:00', 'task_id': 'long_running_task', 'execution_date': '2025-07-21 17:27:04.079061+00:00', 'try_number': 1, 'start_date': '2025-07-21 17:27:25.644300+00:00', 'end_date': 'None', 'state': 'running', 'queue': 'default', 'operator': 'PythonOperator', 'hostname': '2cf9a9b2cf2c', 'log_url': 'http://localhost:8080/dags/complex_failure_dag/grid?dag_run_id=manual__2025-07-21T17%3A27%3A04.079061%2B00%3A00&task_id=long_running_task&tab=logs'}
+[2025-07-21T17:27:25.784+0000] {task_logging_plugin.py:41} INFO - [Task Metadata]-logs**** (running): 
+{'event': 'TASK_RUNNING', 'timestamp': '2025-07-21T17:27:25.784186', 'dag_id': 'complex_failure_dag', 'dag_run_id': 'manual__2025-07-21T17:27:04.079061+00:00', 'task_id': 'long_running_task', 'execution_date': '2025-07-21 17:27:04.079061+00:00', 'try_number': 1, 'start_date': '2025-07-21 17:27:25.644300+00:00', 'end_date': 'None', 'state': 'running', 'queue': 'default', 'operator': 'PythonOperator', 'hostname': '2cf9a9b2cf2c', 'log_url': 'http://localhost:8080/dags/complex_failure_dag/grid?dag_run_id=manual__2025-07-21T17%3A27%3A04.079061%2B00%3A00&task_id=long_running_task&tab=logs'}
+[2025-07-21T17:27:25.794+0000] {task_graph_plugin.py:38} INFO - 
+[task_graph_logs] Task Graph for DAG 'complex_failure_dag':
+  Task: start_task, Upstream: [], Downstream: ['sometimes_fail_task', 'long_running_task'], Operator: SerializedBaseOperator
+  Task: sometimes_fail_task, Upstream: ['start_task'], Downstream: ['final_cleanup'], Operator: SerializedBaseOperator
+  Task: long_running_task, Upstream: ['start_task'], Downstream: ['final_cleanup'], Operator: SerializedBaseOperator
+  Task: final_cleanup, Upstream: ['sometimes_fail_task', 'long_running_task'], Downstream: ['guaranteed_failure'], Operator: SerializedBaseOperator
+  Task: guaranteed_failure, Upstream: ['final_cleanup'], Downstream: [], Operator: SerializedBaseOperator
+
+[2025-07-21T17:27:25.794+0000] {task_graph_plugin.py:42} INFO - 
+[task_graph_logs] Task Graph for DAG 'complex_failure_dag':
+  Task: start_task, Upstream: [], Downstream: ['sometimes_fail_task', 'long_running_task'], Operator: SerializedBaseOperator
+  Task: sometimes_fail_task, Upstream: ['start_task'], Downstream: ['final_cleanup'], Operator: SerializedBaseOperator
+  Task: long_running_task, Upstream: ['start_task'], Downstream: ['final_cleanup'], Operator: SerializedBaseOperator
+  Task: final_cleanup, Upstream: ['sometimes_fail_task', 'long_running_task'], Downstream: ['guaranteed_failure'], Operator: SerializedBaseOperator
+  Task: guaranteed_failure, Upstream: ['final_cleanup'], Downstream: [], Operator: SerializedBaseOperator
+
+[2025-07-21T17:27:25.794+0000] {logging_mixin.py:154} INFO - Starting long running task...
+[2025-07-21T17:28:40.869+0000] {logging_mixin.py:154} INFO - Long running task completed
+[2025-07-21T17:28:40.869+0000] {python.py:194} INFO - Done. Returned value was: None
+[2025-07-21T17:28:40.885+0000] {taskinstance.py:1400} INFO - Marking task as SUCCESS. dag_id=complex_failure_dag, task_id=long_running_task, execution_date=20250721T172704, start_date=20250721T172725, end_date=20250721T172840
+[2025-07-21T17:28:40.904+0000] {task_logging_plugin.py:37} INFO - [Task Metadata] (success): 
+{'event': 'TASK_SUCCESS', 'timestamp': '2025-07-21T17:28:40.904438', 'dag_id': 'complex_failure_dag', 'dag_run_id': 'manual__2025-07-21T17:27:04.079061+00:00', 'task_id': 'long_running_task', 'execution_date': '2025-07-21 17:27:04.079061+00:00', 'try_number': 2, 'start_date': '2025-07-21 17:27:25.644300+00:00', 'end_date': '2025-07-21 17:28:40.885796+00:00', 'state': <TaskInstanceState.SUCCESS: 'success'>, 'queue': 'default', 'operator': 'PythonOperator', 'hostname': '2cf9a9b2cf2c', 'log_url': 'http://localhost:8080/dags/complex_failure_dag/grid?dag_run_id=manual__2025-07-21T17%3A27%3A04.079061%2B00%3A00&task_id=long_running_task&tab=logs'}
+[2025-07-21T17:28:40.905+0000] {task_logging_plugin.py:41} INFO - [Task Metadata]-logs**** (success): 
+{'event': 'TASK_SUCCESS', 'timestamp': '2025-07-21T17:28:40.904438', 'dag_id': 'complex_failure_dag', 'dag_run_id': 'manual__2025-07-21T17:27:04.079061+00:00', 'task_id': 'long_running_task', 'execution_date': '2025-07-21 17:27:04.079061+00:00', 'try_number': 2, 'start_date': '2025-07-21 17:27:25.644300+00:00', 'end_date': '2025-07-21 17:28:40.885796+00:00', 'state': <TaskInstanceState.SUCCESS: 'success'>, 'queue': 'default', 'operator': 'PythonOperator', 'hostname': '2cf9a9b2cf2c', 'log_url': 'http://localhost:8080/dags/complex_failure_dag/grid?dag_run_id=manual__2025-07-21T17%3A27%3A04.079061%2B00%3A00&task_id=long_running_task&tab=logs'}
+[2025-07-21T17:28:40.921+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 0
+[2025-07-21T17:28:40.943+0000] {taskinstance.py:2778} INFO - 0 downstream tasks scheduled from follow-on schedule check

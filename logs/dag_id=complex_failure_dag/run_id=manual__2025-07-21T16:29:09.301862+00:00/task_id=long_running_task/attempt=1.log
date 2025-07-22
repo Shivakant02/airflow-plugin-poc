@@ -1,0 +1,15 @@
+[2025-07-21T16:29:31.380+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: complex_failure_dag.long_running_task manual__2025-07-21T16:29:09.301862+00:00 [queued]>
+[2025-07-21T16:29:31.390+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: complex_failure_dag.long_running_task manual__2025-07-21T16:29:09.301862+00:00 [queued]>
+[2025-07-21T16:29:31.390+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 4
+[2025-07-21T16:29:31.402+0000] {taskinstance.py:1382} INFO - Executing <Task(PythonOperator): long_running_task> on 2025-07-21 16:29:09.301862+00:00
+[2025-07-21T16:29:31.407+0000] {standard_task_runner.py:57} INFO - Started process 196 to run task
+[2025-07-21T16:29:31.410+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'complex_failure_dag', 'long_running_task', 'manual__2025-07-21T16:29:09.301862+00:00', '--job-id', '4', '--raw', '--subdir', 'DAGS_FOLDER/complex_failure_dag.py', '--cfg-path', '/tmp/tmpxceluk_i']
+[2025-07-21T16:29:31.412+0000] {standard_task_runner.py:85} INFO - Job 4: Subtask long_running_task
+[2025-07-21T16:29:31.450+0000] {task_command.py:416} INFO - Running <TaskInstance: complex_failure_dag.long_running_task manual__2025-07-21T16:29:09.301862+00:00 [running]> on host 2cf9a9b2cf2c
+[2025-07-21T16:29:31.506+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='metadata_test' AIRFLOW_CTX_DAG_ID='complex_failure_dag' AIRFLOW_CTX_TASK_ID='long_running_task' AIRFLOW_CTX_EXECUTION_DATE='2025-07-21T16:29:09.301862+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-07-21T16:29:09.301862+00:00'
+[2025-07-21T16:29:31.506+0000] {logging_mixin.py:154} INFO - Starting long running task...
+[2025-07-21T16:30:46.522+0000] {logging_mixin.py:154} INFO - Long running task completed
+[2025-07-21T16:30:46.523+0000] {python.py:194} INFO - Done. Returned value was: None
+[2025-07-21T16:30:46.538+0000] {taskinstance.py:1400} INFO - Marking task as SUCCESS. dag_id=complex_failure_dag, task_id=long_running_task, execution_date=20250721T162909, start_date=20250721T162931, end_date=20250721T163046
+[2025-07-21T16:30:46.565+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 0
+[2025-07-21T16:30:46.578+0000] {taskinstance.py:2778} INFO - 0 downstream tasks scheduled from follow-on schedule check

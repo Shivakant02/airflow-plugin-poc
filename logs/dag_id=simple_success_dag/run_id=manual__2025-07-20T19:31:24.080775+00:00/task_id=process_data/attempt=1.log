@@ -1,0 +1,14 @@
+{"timestamp":"2025-07-20T19:31:58.412233","level":"info","event":"MetadataExtractionPlugin module is being loaded","logger":"metadata_extraction_plugin"}
+{"timestamp":"2025-07-20T19:31:58.412733","level":"info","event":"MetadataExtractionPlugin initialized successfully","logger":"metadata_extraction_plugin"}
+{"timestamp":"2025-07-20T19:31:58.740480","level":"info","event":"DAG bundles loaded: dags-folder, example_dags","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager"}
+{"timestamp":"2025-07-20T19:31:58.740949","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/simple_success_dag.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-07-20T19:31:58.756903Z","level":"info","event":"Task instance is in running state","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T19:31:58.757095Z","level":"info","event":" Previous state of the Task instance: TaskInstanceState.QUEUED","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T19:31:58.757217Z","level":"info","event":"Current task name:process_data","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T19:31:58.757288Z","level":"info","event":"Dag name:simple_success_dag","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T19:31:58.758571Z","level":"info","event":"Processing some sample data...","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T19:32:43.758785Z","level":"info","event":"Data processing completed","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T19:32:43.758812","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator"}
+{"timestamp":"2025-07-20T19:32:43.777243Z","level":"info","event":"Task instance in success state","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T19:32:43.777387Z","level":"info","event":" Previous state of the Task instance: TaskInstanceState.RUNNING","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T19:32:43.777500Z","level":"info","event":"Task operator:<Task(PythonOperator): process_data>","chan":"stdout","logger":"task"}

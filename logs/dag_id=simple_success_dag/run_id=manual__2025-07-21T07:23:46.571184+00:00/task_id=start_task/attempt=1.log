@@ -1,0 +1,15 @@
+{"timestamp":"2025-07-21T07:23:48.328353","level":"info","event":"MetadataExtractionPlugin module is being loaded","logger":"metadata_extraction_plugin"}
+{"timestamp":"2025-07-21T07:23:48.328605","level":"info","event":"MetadataExtractionPlugin initialized successfully","logger":"metadata_extraction_plugin"}
+{"timestamp":"2025-07-21T07:23:49.742139","level":"info","event":"DAG bundles loaded: dags-folder, example_dags","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager"}
+{"timestamp":"2025-07-21T07:23:49.743290","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/simple_success_dag.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-07-21T07:23:50.001092Z","level":"info","event":"Task instance is in running state","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-21T07:23:50.001458Z","level":"info","event":" Previous state of the Task instance: TaskInstanceState.QUEUED","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-21T07:23:50.001726Z","level":"info","event":"Current task name:start_task","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-21T07:23:50.001890Z","level":"info","event":"Dag name:simple_success_dag","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-21T07:23:50.004527Z","level":"info","event":"DAG starting - this should always work","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-21T07:23:50.004752Z","level":"info","event":"Current time: 2025-07-21 07:23:50.004435","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-21T07:24:20.004684Z","level":"info","event":"Start task completed successfully","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-21T07:24:20.004719","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator"}
+{"timestamp":"2025-07-21T07:24:20.024828Z","level":"info","event":"Task instance in success state","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-21T07:24:20.025090Z","level":"info","event":" Previous state of the Task instance: TaskInstanceState.RUNNING","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-21T07:24:20.025335Z","level":"info","event":"Task operator:<Task(PythonOperator): start_task>","chan":"stdout","logger":"task"}

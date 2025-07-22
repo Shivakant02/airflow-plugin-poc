@@ -1,0 +1,13 @@
+{"timestamp":"2025-07-20T18:05:47.851023","level":"info","event":"DAG bundles loaded: dags-folder, example_dags","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager"}
+{"timestamp":"2025-07-20T18:05:47.851329","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/simple_success_dag.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-07-20T18:05:47.873551Z","level":"info","event":"Task instance is in running state","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T18:05:47.873796Z","level":"info","event":" Previous state of the Task instance: TaskInstanceState.QUEUED","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T18:05:47.873940Z","level":"info","event":"Current task name:start_task","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T18:05:47.874019Z","level":"info","event":"Dag name:simple_success_dag","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T18:05:47.875359Z","level":"info","event":"DAG starting - this should always work","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T18:05:47.875474Z","level":"info","event":"Current time: 2025-07-20 18:05:47.875326","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T18:06:17.876235Z","level":"info","event":"Start task completed successfully","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T18:06:17.876729","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator"}
+{"timestamp":"2025-07-20T18:06:17.901047Z","level":"info","event":"Task instance in success state","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T18:06:17.901275Z","level":"info","event":" Previous state of the Task instance: TaskInstanceState.RUNNING","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T18:06:17.901418Z","level":"info","event":"Task operator:<Task(PythonOperator): start_task>","chan":"stdout","logger":"task"}

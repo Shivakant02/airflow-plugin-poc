@@ -1,0 +1,22 @@
+[2025-07-21T16:29:31.361+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: complex_failure_dag.sometimes_fail_task manual__2025-07-21T16:29:09.301862+00:00 [queued]>
+[2025-07-21T16:29:31.370+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: complex_failure_dag.sometimes_fail_task manual__2025-07-21T16:29:09.301862+00:00 [queued]>
+[2025-07-21T16:29:31.370+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 3
+[2025-07-21T16:29:31.382+0000] {taskinstance.py:1382} INFO - Executing <Task(PythonOperator): sometimes_fail_task> on 2025-07-21 16:29:09.301862+00:00
+[2025-07-21T16:29:31.385+0000] {standard_task_runner.py:57} INFO - Started process 195 to run task
+[2025-07-21T16:29:31.388+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'complex_failure_dag', 'sometimes_fail_task', 'manual__2025-07-21T16:29:09.301862+00:00', '--job-id', '3', '--raw', '--subdir', 'DAGS_FOLDER/complex_failure_dag.py', '--cfg-path', '/tmp/tmpmuh31fpm']
+[2025-07-21T16:29:31.390+0000] {standard_task_runner.py:85} INFO - Job 3: Subtask sometimes_fail_task
+[2025-07-21T16:29:31.428+0000] {task_command.py:416} INFO - Running <TaskInstance: complex_failure_dag.sometimes_fail_task manual__2025-07-21T16:29:09.301862+00:00 [running]> on host 2cf9a9b2cf2c
+[2025-07-21T16:29:31.491+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='metadata_test' AIRFLOW_CTX_DAG_ID='complex_failure_dag' AIRFLOW_CTX_TASK_ID='sometimes_fail_task' AIRFLOW_CTX_EXECUTION_DATE='2025-07-21T16:29:09.301862+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-07-21T16:29:09.301862+00:00'
+[2025-07-21T16:29:31.492+0000] {taskinstance.py:1937} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 192, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 209, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/complex_failure_dag.py", line 34, in sometimes_fail_task
+    """Task that randomly fails to demonstrate retry behavior"""[37][41][42]
+IndexError: string index out of range
+[2025-07-21T16:29:31.499+0000] {taskinstance.py:1400} INFO - Marking task as UP_FOR_RETRY. dag_id=complex_failure_dag, task_id=sometimes_fail_task, execution_date=20250721T162909, start_date=20250721T162931, end_date=20250721T162931
+[2025-07-21T16:29:31.508+0000] {standard_task_runner.py:104} ERROR - Failed to execute job 3 for task sometimes_fail_task (string index out of range; 195)
+[2025-07-21T16:29:31.520+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 1
+[2025-07-21T16:29:31.535+0000] {taskinstance.py:2778} INFO - 0 downstream tasks scheduled from follow-on schedule check

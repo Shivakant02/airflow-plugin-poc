@@ -1,0 +1,13 @@
+{"timestamp":"2025-07-20T18:50:42.514314","level":"info","event":"DAG bundles loaded: dags-folder, example_dags","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager"}
+{"timestamp":"2025-07-20T18:50:42.514610","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/complex_failure_dag.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-07-20T18:50:42.555377Z","level":"info","event":"Task instance is in running state","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T18:50:42.555511Z","level":"info","event":" Previous state of the Task instance: TaskInstanceState.QUEUED","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T18:50:42.555619Z","level":"info","event":"Current task name:start_task","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T18:50:42.555682Z","level":"info","event":"Dag name:complex_failure_dag","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T18:50:42.556952Z","level":"info","event":"Starting complex failure DAG","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T18:50:42.557066Z","level":"info","event":"Current time: 2025-07-20 18:50:42.556881","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T18:51:02.557569Z","level":"info","event":"Start task completed successfully","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T18:51:02.557717","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator"}
+{"timestamp":"2025-07-20T18:51:02.592719Z","level":"info","event":"Task instance in success state","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T18:51:02.592857Z","level":"info","event":" Previous state of the Task instance: TaskInstanceState.RUNNING","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T18:51:02.592975Z","level":"info","event":"Task operator:<Task(PythonOperator): start_task>","chan":"stdout","logger":"task"}

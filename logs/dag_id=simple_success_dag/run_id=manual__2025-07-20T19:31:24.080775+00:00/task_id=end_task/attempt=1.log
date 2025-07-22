@@ -1,0 +1,14 @@
+{"timestamp":"2025-07-20T19:32:44.217338","level":"info","event":"MetadataExtractionPlugin module is being loaded","logger":"metadata_extraction_plugin"}
+{"timestamp":"2025-07-20T19:32:44.217650","level":"info","event":"MetadataExtractionPlugin initialized successfully","logger":"metadata_extraction_plugin"}
+{"timestamp":"2025-07-20T19:32:44.491158","level":"info","event":"DAG bundles loaded: dags-folder, example_dags","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager"}
+{"timestamp":"2025-07-20T19:32:44.491449","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/simple_success_dag.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-07-20T19:32:44.696331Z","level":"info","event":"Task instance is in running state","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T19:32:44.696540Z","level":"info","event":" Previous state of the Task instance: TaskInstanceState.QUEUED","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T19:32:44.696693Z","level":"info","event":"Current task name:end_task","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T19:32:44.696783Z","level":"info","event":"Dag name:simple_success_dag","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T19:32:44.698659Z","level":"info","event":"DAG ending - wrapping up","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T19:32:59.698840Z","level":"info","event":"End task completed successfully","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T19:32:59.698793","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator"}
+{"timestamp":"2025-07-20T19:32:59.711902Z","level":"info","event":"Task instance in success state","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T19:32:59.712067Z","level":"info","event":" Previous state of the Task instance: TaskInstanceState.RUNNING","chan":"stdout","logger":"task"}
+{"timestamp":"2025-07-20T19:32:59.712209Z","level":"info","event":"Task operator:<Task(PythonOperator): end_task>","chan":"stdout","logger":"task"}
