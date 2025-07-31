@@ -1,7 +1,0 @@
-{"timestamp":"2025-07-20T19:07:22.887017","level":"info","event":"DAG bundles loaded: dags-folder, example_dags","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager"}
-{"timestamp":"2025-07-20T19:07:22.887359","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/complex_failure_dag.py","logger":"airflow.models.dagbag.DagBag"}
-{"timestamp":"2025-07-20T19:07:22.927454Z","level":"info","event":"Task instance is in running state","chan":"stdout","logger":"task"}
-{"timestamp":"2025-07-20T19:07:22.927690Z","level":"info","event":" Previous state of the Task instance: TaskInstanceState.QUEUED","chan":"stdout","logger":"task"}
-{"timestamp":"2025-07-20T19:07:22.927965Z","level":"info","event":"Current task name:long_running_task","chan":"stdout","logger":"task"}
-{"timestamp":"2025-07-20T19:07:22.928058Z","level":"info","event":"Dag name:complex_failure_dag","chan":"stdout","logger":"task"}
-{"timestamp":"2025-07-20T19:07:22.929486Z","level":"info","event":"Starting long running task...","chan":"stdout","logger":"task"}
