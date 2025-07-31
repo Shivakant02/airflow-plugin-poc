@@ -46,3 +46,4 @@ class DagLoggingListener:
 class DagLoggingPlugin(AirflowPlugin):
     name = "dag_logging_plugin"
     listeners = [DagLoggingListener()]
+    

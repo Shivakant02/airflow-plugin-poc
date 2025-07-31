@@ -1,20 +1,17 @@
 # plugins/task_graph_plugin.py
 
-import logging
 from airflow.plugins_manager import AirflowPlugin
 from airflow.listeners import hookimpl
-from airflow.models.dagrun import DagRun
 from airflow.models.taskinstance import TaskInstance
 from airflow.models.serialized_dag import SerializedDagModel
-from collections import defaultdict
+from airflow.utils.log.logging_mixin import LoggingMixin
 
-logger = logging.getLogger("airflow.graph")
+logger = LoggingMixin().log  # ✅ Use Airflow's logger
 
 def extract_task_graph(dag_id: str):
-    """Extracts a dict representing the task graph from SerializedDagModel"""
     serialized_dag = SerializedDagModel.get(dag_id=dag_id)
     if not serialized_dag:
-        logger.warning(f"No Serialized DAG found for DAG ID: {dag_id}")
+        logger.warning(f"[task_graph_logs] No Serialized DAG found for DAG ID: {dag_id}")
         return {}
 
     dag = serialized_dag.dag
@@ -33,9 +30,16 @@ def log_task_graph(ti: TaskInstance):
     dag_id = ti.dag_id
     graph_data = extract_task_graph(dag_id)
 
-    logger.info(f"T[task_grap_logs] --> ask Graph Structure for DAG '{dag_id}':\n")
+    log_msg = f"\n[task_graph_logs] Task Graph for DAG '{dag_id}':\n"
     for task_id, info in graph_data.items():
-        logger.info(f"  Task: {task_id}, Upstream: {info['upstream']}, Downstream: {info['downstream']}, Operator: {info['operator']}")
+        log_msg += f"  Task: {task_id}, Upstream: {info['upstream']}, Downstream: {info['downstream']}, Operator: {info['operator']}\n"
+
+    # ✅ Scheduler/console
+    logger.info(log_msg)
+
+    # ✅ Log to task logs (UI)
+    if hasattr(ti, "log"):
+        ti.log.info(log_msg)
 
 class TaskGraphLoggingListener:
     @hookimpl
