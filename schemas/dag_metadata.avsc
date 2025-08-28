@@ -1,0 +1,41 @@
+{
+  "namespace": "com.airflow.metadata",
+  "type": "record",
+  "name": "DagMetadata",
+  "fields": [
+    {
+      "name": "type",
+      "type": "string",
+      "default": "dag_metadata"
+    },
+    {
+      "name": "dag_id",
+      "type": "string"
+    },
+    {
+      "name": "dag_run_id",
+      "type": "string"
+    },
+    {
+      "name": "dag_execution_date",
+      "type": "string"
+    },
+    {
+      "name": "dag_state",
+      "type": "string"
+    },
+    {
+      "name": "start_date",
+      "type": "string"
+    },
+    {
+      "name": "end_date",
+      "type": "string"
+    },
+    {
+      "name": "pipeline_run_id",
+      "type": ["null", "string"],
+      "default": null
+    }
+  ]
+}

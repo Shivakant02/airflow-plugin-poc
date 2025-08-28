@@ -1,0 +1,67 @@
+{
+  "namespace": "com.airflow.metadata",
+  "type": "record",
+  "name": "GraphMetadata",
+  "fields": [
+    {
+      "name": "type",
+      "type": "string",
+      "default": "graph_metadata"
+    },
+    {
+      "name": "event",
+      "type": "string"
+    },
+    {
+      "name": "timestamp",
+      "type": "string"
+    },
+    {
+      "name": "dag_id",
+      "type": "string"
+    },
+    {
+      "name": "dag_run_id",
+      "type": "string"
+    },
+    {
+      "name": "task_id",
+      "type": "string"
+    },
+    {
+      "name": "pipeline_run_id",
+      "type": ["null", "string"],
+      "default": null
+    },
+    {
+      "name": "graph",
+      "type": {
+        "type": "map",
+        "values": {
+          "type": "record",
+          "name": "TaskInfo",
+          "fields": [
+            {
+              "name": "upstream",
+              "type": {
+                "type": "array",
+                "items": "string"
+              }
+            },
+            {
+              "name": "downstream",
+              "type": {
+                "type": "array",
+                "items": "string"
+              }
+            },
+            {
+              "name": "operator",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,4 +1,3 @@
-version: "3"
 x-airflow-common: &airflow-common
   image: apache/airflow:2.7.3
   environment:
@@ -6,12 +5,15 @@ x-airflow-common: &airflow-common
     - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
     - AIRFLOW__CORE__FERNET_KEY=YOUR_GENERATED_KEY
     - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    - _PIP_ADDITIONAL_REQUIREMENTS=kafka-python==2.0.2 avro-python3==1.10.2
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
+    - ./requirements.txt:/requirements.txt
   depends_on:
     - postgres
+    - kafka
 
 services:
   postgres:
@@ -20,6 +22,37 @@ services:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
       POSTGRES_DB: airflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://localhost:9092,PLAINTEXT_DOCKER://kafka:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT_DOCKER:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT_HOST://0.0.0.0:9092,PLAINTEXT_DOCKER://0.0.0.0:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_DOCKER
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
 
   airflow-webserver:
     <<: *airflow-common
@@ -36,3 +69,22 @@ services:
     entrypoint: /bin/bash
     command: -c "airflow db migrate && airflow users create \
       --username airflow --password airflow --firstname Airflow --lastname Admin --role Admin --email admin@example.com"
+
+  kafka-consumer:
+    build:
+      context: ./kafka-consumer
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka
+      - postgres
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9093
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=airflow
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
