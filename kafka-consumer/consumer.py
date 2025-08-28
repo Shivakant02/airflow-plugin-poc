@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Kafka consumer to monitor messages from the 'pryzm' topic
-and store them in PostgreSQL database
+and store them in PostgreSQL database with Avro deserialization support
 """
 
 import json
@@ -9,6 +9,15 @@ import psycopg2
 import psycopg2.extras
 from datetime import datetime
 from kafka import KafkaConsumer
+
+try:
+    from avro_utils import deserialize_message, get_serializer
+    AVRO_AVAILABLE = True
+    print("✅ Avro support available")
+except ImportError as e:
+    AVRO_AVAILABLE = False
+    print(f"⚠️  Avro support not available: {e}")
+    print("📝 Will use JSON fallback")
 
 # Database configuration
 DB_CONFIG = {
@@ -81,10 +90,12 @@ def consume_pryzm_messages():
     consumer = KafkaConsumer(
         'pryzm',
         bootstrap_servers=['localhost:9092'],
-        auto_offset_reset='earliest',  # Start from beginning
+        auto_offset_reset='earliest',
         enable_auto_commit=True,
-        group_id='pryzm-monitor',
-        value_deserializer=lambda m: json.loads(m.decode('utf-8'))
+        group_id='airflow-metadata-consumer',
+        value_deserializer=None,  # We'll handle deserialization manually
+        fetch_min_bytes=1,
+        fetch_max_wait_ms=1000
     )
     
     print("🎯 Listening for messages on 'pryzm' topic...")
@@ -97,9 +108,73 @@ def consume_pryzm_messages():
         for message in consumer:
             message_count += 1
             
-            # Extract message details
-            message_data = message.value
+            # Extract message details and deserialize
+            raw_message = message.value
             message_key = message.key.decode('utf-8') if message.key else None
+            
+            # Try to deserialize with Avro first, fallback to JSON
+            message_data = None
+            deserialization_method = "unknown"
+            
+            # First, let's inspect the raw message to determine its format
+            print(f"🔍 Raw message inspection:")
+            print(f"   Type: {type(raw_message)}")
+            print(f"   Length: {len(raw_message)} bytes")
+            print(f"   First 50 chars: {str(raw_message[:50])}")
+            
+            # Check if message looks like JSON (starts with { or [)
+            is_json_like = False
+            try:
+                if isinstance(raw_message, bytes):
+                    decoded = raw_message.decode('utf-8')
+                    is_json_like = decoded.strip().startswith(('{', '['))
+                    print(f"   Looks like JSON: {is_json_like}")
+                elif isinstance(raw_message, str):
+                    is_json_like = raw_message.strip().startswith(('{', '['))
+                    print(f"   Looks like JSON: {is_json_like}")
+            except:
+                print(f"   Cannot decode as UTF-8 - likely binary Avro data")
+            
+            if AVRO_AVAILABLE and not is_json_like:
+                # Try to determine message type from key or try all schemas
+                message_type = None
+                if message_key:
+                    if '_task' in message_key or message_key.endswith('_task'):
+                        message_type = 'task_metadata'
+                    elif '_dag' in message_key:
+                        message_type = 'dag_metadata'
+                    elif '_graph' in message_key:
+                        message_type = 'graph_metadata'
+                
+                # Try Avro deserialization
+                if message_type:
+                    try:
+                        message_data = deserialize_message(raw_message, message_type)
+                        deserialization_method = f"Avro ({message_type})"
+                        print(f"✅ Successfully deserialized with Avro ({message_type})")
+                    except Exception as e:
+                        print(f"⚠️  Avro deserialization failed: {e}")
+                
+                # If Avro failed, try all schemas
+                if not message_data:
+                    for schema_type in ['task_metadata', 'dag_metadata', 'graph_metadata']:
+                        try:
+                            message_data = deserialize_message(raw_message, schema_type)
+                            deserialization_method = f"Avro ({schema_type})"
+                            print(f"✅ Successfully deserialized with Avro ({schema_type})")
+                            break
+                        except:
+                            continue
+            
+            # Fallback to JSON if Avro failed
+            if not message_data:
+                try:
+                    message_data = json.loads(raw_message.decode('utf-8'))
+                    deserialization_method = "JSON"
+                except Exception as e:
+                    print(f"❌ Both Avro and JSON deserialization failed: {e}")
+                    continue
+            
             message_type = message_data.get('type', 'unknown')
             
             print(f"📊 Received message #{message_count}:")
@@ -107,6 +182,7 @@ def consume_pryzm_messages():
             print(f"   Partition: {message.partition}")
             print(f"   Offset: {message.offset}")
             print(f"   Type: {message_type}")
+            print(f"   Deserialization: {deserialization_method}")
             print(f"   Value: {json.dumps(message_data, indent=2)}")
             
             # Store in PostgreSQL

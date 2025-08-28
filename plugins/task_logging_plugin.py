@@ -2,6 +2,7 @@
 
 import logging
 import json
+import os
 from datetime import datetime
 from urllib.parse import quote_plus
 from airflow.plugins_manager import AirflowPlugin
@@ -17,6 +18,15 @@ try:
 except ImportError:
     KAFKA_AVAILABLE = False
 
+try:
+    import sys
+    sys.path.append('/opt/airflow/plugins')
+    from avro_utils import serialize_message, compare_sizes
+    AVRO_AVAILABLE = True
+except ImportError as e:
+    AVRO_AVAILABLE = False
+    print(f"Avro not available: {e}")
+
 logger = logging.getLogger("airflow.task")
 
 # Kafka configuration
@@ -30,9 +40,10 @@ def get_kafka_producer():
         return None
     
     try:
+        # Use binary serializer for Avro data
         producer = KafkaProducer(
             bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,
-            value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+            value_serializer=None,  # We'll handle serialization manually
             key_serializer=lambda k: k.encode('utf-8') if k else None,
             retries=3,
             acks='all',
@@ -46,8 +57,8 @@ def get_kafka_producer():
         logger.error(f"Failed to initialize Kafka producer: {str(e)}")
         return None
 
-def push_to_kafka(data, key=None):
-    """Push data to Kafka topic with error handling"""
+def push_to_kafka(data, key=None, message_type=None):
+    """Push data to Kafka topic with Avro serialization and error handling"""
     producer = get_kafka_producer()
     if not producer:
         logger.warning("Kafka producer not available. Skipping Kafka push.")
@@ -55,7 +66,29 @@ def push_to_kafka(data, key=None):
     
     try:
         logger.info(f"Pushing data to Kafka topic '{KAFKA_TOPIC}'...")
-        future = producer.send(KAFKA_TOPIC, value=data, key=key)
+        
+        # Serialize data using Avro if available, otherwise use JSON
+        if AVRO_AVAILABLE and message_type:
+            try:
+                # Get size comparison
+                json_size, avro_size = compare_sizes(data, message_type)
+                compression_ratio = round((1 - avro_size/json_size) * 100, 2)
+                
+                logger.info(f"Message size comparison - JSON: {json_size} bytes, Avro: {avro_size} bytes, Compression: {compression_ratio}%")
+                
+                # Serialize with Avro
+                serialized_data = serialize_message(data, message_type)
+                logger.info(f"Successfully serialized message using Avro schema: {message_type}")
+                
+            except Exception as e:
+                logger.warning(f"Avro serialization failed, falling back to JSON: {str(e)}")
+                serialized_data = json.dumps(data).encode('utf-8')
+        else:
+            # Fallback to JSON serialization
+            serialized_data = json.dumps(data).encode('utf-8')
+            logger.info("Using JSON serialization (Avro not available)")
+        
+        future = producer.send(KAFKA_TOPIC, value=serialized_data, key=key)
         
         # Wait for the message to be sent
         record_metadata = future.get(timeout=10)
@@ -150,7 +183,7 @@ def log_task_info(state: str, ti: TaskInstance):
     # Push task metadata to Kafka
     try:
         kafka_key = f"{ti.dag_id}_{ti.run_id}_{ti.task_id}"
-        push_success = push_to_kafka(metadata, key=kafka_key)
+        push_success = push_to_kafka(metadata, key=kafka_key, message_type='task_metadata')
         if push_success:
             logger.info(f"Task metadata successfully pushed to Kafka for task {ti.task_id}")
         else:
@@ -162,7 +195,7 @@ def log_task_info(state: str, ti: TaskInstance):
     if 'dag_metadata' in locals():
         try:
             dag_kafka_key = f"{dagrun.dag_id}_{dagrun.run_id}_dag"
-            dag_push_success = push_to_kafka(dag_metadata, key=dag_kafka_key)
+            dag_push_success = push_to_kafka(dag_metadata, key=dag_kafka_key, message_type='dag_metadata')
             if dag_push_success:
                 logger.info(f"DAG metadata successfully pushed to Kafka for DAG {dagrun.dag_id}")
             else:
@@ -174,7 +207,7 @@ def log_task_info(state: str, ti: TaskInstance):
     if 'graph_metadata' in locals():
         try:
             graph_kafka_key = f"{ti.dag_id}_{ti.run_id}_graph"
-            graph_push_success = push_to_kafka(graph_metadata, key=graph_kafka_key)
+            graph_push_success = push_to_kafka(graph_metadata, key=graph_kafka_key, message_type='graph_metadata')
             if graph_push_success:
                 logger.info(f"Graph metadata successfully pushed to Kafka for DAG {ti.dag_id}")
             else:

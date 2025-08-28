@@ -5,7 +5,7 @@ x-airflow-common: &airflow-common
     - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
     - AIRFLOW__CORE__FERNET_KEY=YOUR_GENERATED_KEY
     - AIRFLOW__CORE__LOAD_EXAMPLES=False
-    - _PIP_ADDITIONAL_REQUIREMENTS=kafka-python==2.0.2
+    - _PIP_ADDITIONAL_REQUIREMENTS=kafka-python==2.0.2 avro-python3==1.10.2
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs

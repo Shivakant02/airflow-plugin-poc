@@ -1,0 +1,73 @@
+{
+  "namespace": "com.airflow.metadata",
+  "type": "record",
+  "name": "TaskMetadata",
+  "fields": [
+    {
+      "name": "type",
+      "type": "string",
+      "default": "task_metadata"
+    },
+    {
+      "name": "event",
+      "type": "string"
+    },
+    {
+      "name": "pipeline_run_id",
+      "type": ["null", "string"],
+      "default": null
+    },
+    {
+      "name": "timestamp",
+      "type": "string"
+    },
+    {
+      "name": "dag_id",
+      "type": "string"
+    },
+    {
+      "name": "dag_run_id",
+      "type": "string"
+    },
+    {
+      "name": "task_id",
+      "type": "string"
+    },
+    {
+      "name": "execution_date",
+      "type": "string"
+    },
+    {
+      "name": "try_number",
+      "type": "int"
+    },
+    {
+      "name": "start_date",
+      "type": "string"
+    },
+    {
+      "name": "end_date",
+      "type": "string"
+    },
+    {
+      "name": "state",
+      "type": "string"
+    },
+    {
+      "name": "queue",
+      "type": "string"
+    },
+    {
+      "name": "operator",
+      "type": "string"
+    },
+    {
+      "name": "hostname",
+      "type": "string"
+    },
+    {
+      "name": "log_url",
+      "type": "string"
+    }
+  ]
+}
