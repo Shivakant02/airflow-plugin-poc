@@ -70,5 +70,21 @@ services:
     command: -c "airflow db migrate && airflow users create \
       --username airflow --password airflow --firstname Airflow --lastname Admin --role Admin --email admin@example.com"
 
+  kafka-consumer:
+    build:
+      context: ./kafka-consumer
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka
+      - postgres
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9093
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=airflow
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+    restart: unless-stopped
+
 volumes:
   postgres_data:
