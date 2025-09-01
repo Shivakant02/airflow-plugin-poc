@@ -21,7 +21,6 @@ except ImportError as e:
 def is_binary_data(data):
     """Check if data is binary (likely Avro)"""
     try:
-        # Try to decode as UTF-8, if it fails it's likely binary
         data.decode('utf-8')
         return False
     except UnicodeDecodeError:
@@ -107,14 +106,13 @@ def test_kafka_consumer():
     print("🚀 Starting enhanced Kafka consumer test for Avro messages")
     print("=" * 60)
     
-    # Configure consumer
     try:
         consumer = KafkaConsumer(
-            'pryzm',  # Topic name from your setup
+            'pryzm',
             bootstrap_servers=['localhost:9092'],
             auto_offset_reset='earliest',
             group_id='test-consumer-avro',
-            value_deserializer=None,  # We'll handle deserialization manually
+            value_deserializer=None,
             key_deserializer=None
         )
         print("✅ Connected to Kafka successfully")

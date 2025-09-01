@@ -38,7 +38,7 @@ The repository includes an automated setup script that handles all the initializ
 
 This comprehensive script will:
 
-- Install all required Python dependencies (including avro-python3==1.10.2)
+- Install all required Python dependencies (including avro-python3==1.8.1)
 - Create necessary directories with proper permissions
 - Set up Airflow UID (50000) for container compatibility
 - Initialize the Airflow database and create admin user

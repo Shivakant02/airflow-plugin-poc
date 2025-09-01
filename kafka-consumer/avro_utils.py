@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 Avro serialization utilities for Airflow metadata
+Compatible with avro-python3==1.8.1
 """
 
 import json
@@ -31,26 +32,46 @@ class AvroSerializer:
             if os.path.exists(schema_path):
                 with open(schema_path, 'r') as f:
                     if schema_name == 'graph_metadata':
-                        # For graph metadata, we need to handle multiple schemas in one file
+                        # Handle graph metadata with multiple schemas (compatible with 1.8.1)
                         content = f.read()
-                        # Split by schema boundaries and parse each
                         schemas_content = content.strip().split('\n\n')
                         if len(schemas_content) >= 2:
-                            # Parse TaskInfo schema first
-                            task_info_schema = avro.schema.parse(schemas_content[0])
-                            # Parse GraphMetadata schema
-                            graph_schema = avro.schema.parse(schemas_content[1])
-                            self.schemas['task_info'] = task_info_schema
-                            self.schemas[schema_name] = graph_schema
+                            try:
+                                # Parse TaskInfo schema first
+                                task_info_schema = avro.schema.Parse(schemas_content[0])
+                                # Parse GraphMetadata schema  
+                                graph_schema = avro.schema.Parse(schemas_content[1])
+                                self.schemas['task_info'] = task_info_schema
+                                self.schemas[schema_name] = graph_schema
+                            except Exception as e:
+                                print(f"❌ Error parsing graph_metadata schema: {e}")
+                                # Fallback: try as single schema
+                                try:
+                                    schema_json = json.loads(schemas_content[1] if len(schemas_content) > 1 else content)
+                                    self.schemas[schema_name] = avro.schema.Parse(json.dumps(schema_json))
+                                except Exception as fallback_error:
+                                    print(f"❌ Fallback parsing failed for {schema_name}: {fallback_error}")
+                        else:
+                            # Single schema in file
+                            try:
+                                schema_json = json.loads(content)
+                                self.schemas[schema_name] = avro.schema.Parse(json.dumps(schema_json))
+                            except Exception as e:
+                                print(f"❌ Error parsing single {schema_name} schema: {e}")
                     else:
-                        schema_json = json.load(f)
-                        self.schemas[schema_name] = avro.schema.parse(json.dumps(schema_json))
+                        try:
+                            schema_json = json.load(f)
+                            # avro-python3==1.8.1 compatible parsing (capital P)
+                            self.schemas[schema_name] = avro.schema.Parse(json.dumps(schema_json))
+                        except Exception as e:
+                            print(f"❌ Error parsing {schema_name} schema: {e}")
+                            continue
                 print(f"✅ Loaded schema: {schema_name}")
             else:
                 print(f"❌ Schema file not found: {schema_path}")
     
     def serialize(self, data: Dict[Any, Any], schema_type: str) -> bytes:
-        """Serialize data using the specified Avro schema"""
+        """Serialize data using the specified Avro schema (compatible with 1.8.1)"""
         if schema_type not in self.schemas:
             raise ValueError(f"Unknown schema type: {schema_type}")
         
@@ -59,27 +80,33 @@ class AvroSerializer:
         # Convert data to match Avro schema requirements
         avro_data = self._convert_to_avro_format(data, schema_type)
         
-        # Serialize
-        writer = avro.io.DatumWriter(schema)
-        bytes_writer = io.BytesIO()
-        encoder = avro.io.BinaryEncoder(bytes_writer)
-        writer.write(avro_data, encoder)
-        
-        return bytes_writer.getvalue()
+        try:
+            # Serialize using avro-python3==1.8.1 compatible approach
+            writer = avro.io.DatumWriter(schema)
+            bytes_writer = io.BytesIO()
+            encoder = avro.io.BinaryEncoder(bytes_writer)
+            writer.write(avro_data, encoder)
+            
+            return bytes_writer.getvalue()
+        except Exception as e:
+            raise ValueError(f"Serialization failed for {schema_type}: {e}")
     
     def deserialize(self, data: bytes, schema_type: str) -> Dict[Any, Any]:
-        """Deserialize Avro data using the specified schema"""
+        """Deserialize Avro data using the specified schema (compatible with 1.8.1)"""
         if schema_type not in self.schemas:
             raise ValueError(f"Unknown schema type: {schema_type}")
         
         schema = self.schemas[schema_type]
         
-        # Deserialize
-        bytes_reader = io.BytesIO(data)
-        decoder = avro.io.BinaryDecoder(bytes_reader)
-        reader = avro.io.DatumReader(schema)
-        
-        return reader.read(decoder)
+        try:
+            # Deserialize using avro-python3==1.8.1 compatible approach
+            bytes_reader = io.BytesIO(data)
+            decoder = avro.io.BinaryDecoder(bytes_reader)
+            reader = avro.io.DatumReader(schema)
+            
+            return reader.read(decoder)
+        except Exception as e:
+            raise ValueError(f"Deserialization failed for {schema_type}: {e}")
     
     def _convert_to_avro_format(self, data: Dict[Any, Any], schema_type: str) -> Dict[Any, Any]:
         """Convert data to match Avro schema format"""
