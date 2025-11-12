@@ -31,7 +31,8 @@ logger = logging.getLogger("airflow.task")
 
 # Kafka configuration
 KAFKA_BOOTSTRAP_SERVERS = ['kafka:9093']  # Use Docker service name with internal port
-KAFKA_TOPIC = 'pryzm'
+# Single topic for all messages
+KAFKA_TOPIC = os.getenv('AIRFLOW_KAFKA_TOPIC', 'airflow-metadata')
 
 def get_kafka_producer():
     """Initialize and return Kafka producer with error handling"""
@@ -63,40 +64,38 @@ def push_to_kafka(data, key=None, message_type=None):
     if not producer:
         logger.warning("Kafka producer not available. Skipping Kafka push.")
         return False
-    
+
     try:
-        logger.info(f"Pushing data to Kafka topic '{KAFKA_TOPIC}'...")
-        
+        logger.info(f"Pushing data to Kafka topic '{KAFKA_TOPIC}' (type={message_type})...")
+
         # Serialize data using Avro if available, otherwise use JSON
         if AVRO_AVAILABLE and message_type:
             try:
-                # Get size comparison
                 json_size, avro_size = compare_sizes(data, message_type)
-                compression_ratio = round((1 - avro_size/json_size) * 100, 2)
-                
-                logger.info(f"Message size comparison - JSON: {json_size} bytes, Avro: {avro_size} bytes, Compression: {compression_ratio}%")
-                
-                # Serialize with Avro
+                compression_ratio = round((1 - avro_size / json_size) * 100, 2)
+
+                logger.info(
+                    f"Message size comparison - JSON: {json_size} bytes, Avro: {avro_size} bytes, Compression: {compression_ratio}%"
+                )
+
                 serialized_data = serialize_message(data, message_type)
                 logger.info(f"Successfully serialized message using Avro schema: {message_type}")
-                
+
             except Exception as e:
                 logger.warning(f"Avro serialization failed, falling back to JSON: {str(e)}")
                 serialized_data = json.dumps(data).encode('utf-8')
         else:
-            # Fallback to JSON serialization
             serialized_data = json.dumps(data).encode('utf-8')
             logger.info("Using JSON serialization (Avro not available)")
-        
+
         future = producer.send(KAFKA_TOPIC, value=serialized_data, key=key)
-        
-        # Wait for the message to be sent
         record_metadata = future.get(timeout=10)
-        
-        logger.info(f"Successfully pushed data to Kafka topic '{KAFKA_TOPIC}' "
-                   f"(partition: {record_metadata.partition}, offset: {record_metadata.offset})")
+
+        logger.info(
+            f"Successfully pushed data to Kafka topic '{KAFKA_TOPIC}' (partition: {record_metadata.partition}, offset: {record_metadata.offset})"
+        )
         return True
-        
+
     except Exception as e:
         logger.error(f"Failed to push data to Kafka topic '{KAFKA_TOPIC}': {str(e)}")
         return False
@@ -252,7 +251,7 @@ def log_dag_run_info(state: str, dag_run: DagRun):
     # Push DAG run metadata to Kafka
     try:
         kafka_key = f"{dag_run.dag_id}_{dag_run.run_id}_dagrun"
-        push_success = push_to_kafka(metadata, key=kafka_key)
+        push_success = push_to_kafka(metadata, key=kafka_key, message_type='dag_run_metadata')
         if push_success:
             logger.info(f"DAG run metadata successfully pushed to Kafka for DAG run {dag_run.run_id}")
         else:
